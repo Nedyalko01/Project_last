@@ -39,7 +39,7 @@ public class UserController {
         return new ResponseEntity<>(responseUser, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id) {
 

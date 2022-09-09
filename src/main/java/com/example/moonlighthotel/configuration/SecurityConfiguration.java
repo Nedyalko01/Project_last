@@ -44,16 +44,17 @@ public class SecurityConfiguration {
                 .authorizeRequests(authorize -> authorize
                         .antMatchers(PUBLIC_URLS).permitAll()
                         .antMatchers(PROTECTED_URLS).hasAnyAuthority(ADMIN)
-                        .antMatchers(HttpMethod.POST, "/users", "/rooms").permitAll()
-                        .antMatchers(HttpMethod.GET, "/users", "/rooms").permitAll()//hasAnyAuthority(ADMIN)
+                        .antMatchers(HttpMethod.POST, "/users/**", "/rooms/**").permitAll()
+                        .antMatchers(HttpMethod.POST, "/users/token/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/users/**", "/rooms/**").permitAll()//hasAnyAuthority(ADMIN)
                         .anyRequest().denyAll())
                 //.addFilterBefore(new JwtTokenFilter(jwtTokenUtil, userService), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .and()
-                .exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler)
-                .authenticationEntryPoint(authenticationEntryPint)
-                .and()
+                //.exceptionHandling()
+                //.accessDeniedHandler(accessDeniedHandler)
+                //.authenticationEntryPoint(authenticationEntryPint)
+                //.and()
                 .csrf().disable();
 
         return http.build();

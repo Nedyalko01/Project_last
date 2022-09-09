@@ -32,7 +32,6 @@ public class LoginService {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    //---------------------------Login-----------------------------------------------
 
    public String login(@NotNull AuthenticationRequest authenticationRequest) throws Exception{
 
@@ -49,7 +48,7 @@ public class LoginService {
       return jwtTokenUtil.generateToken(userDetails);
    }
 
-   //--------------------------------authenticate--------------------------------
+
 
     private void authenticate(String username, String password) throws Exception {
       try {
