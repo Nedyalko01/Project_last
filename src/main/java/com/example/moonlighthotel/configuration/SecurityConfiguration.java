@@ -3,6 +3,7 @@ package com.example.moonlighthotel.configuration;
 
 import com.example.moonlighthotel.exeptions.CustomHttp403ForbiddenEntryPoint;
 import com.example.moonlighthotel.filter.CustomAccessDeniedHandler;
+import com.example.moonlighthotel.filter.JwtTokenFilter;
 import com.example.moonlighthotel.service.impl.UserServiceImpl;
 import com.example.moonlighthotel.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +14,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.example.moonlighthotel.constant.SecurityConstant.*;
+import static com.example.moonlighthotel.constant.SecurityConstant.PROTECTED_URLS;
+import static com.example.moonlighthotel.constant.SecurityConstant.PUBLIC_URLS;
 
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
@@ -42,19 +44,19 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorize -> authorize
-                        .antMatchers(PUBLIC_URLS).permitAll()
-                        .antMatchers(PROTECTED_URLS).hasAnyAuthority(ADMIN)
-                        .antMatchers(HttpMethod.POST, "/users/**", "/rooms/**").permitAll()
+                      .antMatchers(PUBLIC_URLS).permitAll()
+                       .antMatchers(PROTECTED_URLS).permitAll()
+                       .antMatchers(HttpMethod.POST, "/users/**", "/rooms/**").permitAll()
                         .antMatchers(HttpMethod.POST, "/users/token/**").permitAll()
-                        .antMatchers(HttpMethod.GET, "/users/**", "/rooms/**").permitAll()//hasAnyAuthority(ADMIN)
-                        .anyRequest().denyAll())
-                //.addFilterBefore(new JwtTokenFilter(jwtTokenUtil, userService), UsernamePasswordAuthenticationFilter.class)
+                       .antMatchers(HttpMethod.GET, "/users/**", "/rooms/**").permitAll()//hasAnyAuthority(ADMIN)
+                        .anyRequest().permitAll())
+                .addFilterBefore(new JwtTokenFilter(jwtTokenUtil, userService), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .and()
-                //.exceptionHandling()
-                //.accessDeniedHandler(accessDeniedHandler)
-                //.authenticationEntryPoint(authenticationEntryPint)
-                //.and()
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler)
+                .authenticationEntryPoint(authenticationEntryPint)
+                .and()
                 .csrf().disable();
 
         return http.build();

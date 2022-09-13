@@ -1,5 +1,6 @@
 package com.example.moonlighthotel.filter;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static org.springframework.security.access.AccessDecisionVoter.ACCESS_DENIED;
+import static com.example.moonlighthotel.constant.ExceptionConstant.ACCESS_DENIED;
 
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {

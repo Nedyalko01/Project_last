@@ -19,13 +19,13 @@ import static com.example.moonlighthotel.constant.SecurityConstant.INVALID_USERN
 @Service
 public class LoginService {
 
-  private final AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-  private final UserServiceImpl userService;
+    private final UserServiceImpl userService;
 
-  private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
-  @Autowired
+    @Autowired
     public LoginService(AuthenticationManager authenticationManager, UserServiceImpl userService, JwtTokenUtil jwtTokenUtil) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
@@ -33,29 +33,28 @@ public class LoginService {
     }
 
 
-   public String login(@NotNull AuthenticationRequest authenticationRequest) throws Exception{
+    public String login(@NotNull AuthenticationRequest authenticationRequest) throws Exception {
 
-      if(!StringUtils.hasText(authenticationRequest.getUsername())
-              || !StringUtils.hasText(authenticationRequest.getUsername())){
-          throw new BadCredentialsException(BLANK_USERNAME_OR_PASSWORD);
+        if (!StringUtils.hasText(authenticationRequest.getUsername())
+                || !StringUtils.hasText(authenticationRequest.getUsername())) {
+            throw new BadCredentialsException(BLANK_USERNAME_OR_PASSWORD);
 
-       }
+        }
 
-       authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-      final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getUsername());
+        final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getUsername());
 
-      return jwtTokenUtil.generateToken(userDetails);
-   }
-
+        return null;//jwtTokenUtil.generateToken(userDetails);
+    }
 
 
     private void authenticate(String username, String password) throws Exception {
-      try {
-          authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-      } catch (BadCredentialsException ex) {
-          throw new Exception(INVALID_USERNAME_OR_PASSWORD, ex);
-      }
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (BadCredentialsException ex) {
+            throw new Exception(INVALID_USERNAME_OR_PASSWORD, ex);
+        }
 
     }
 }
