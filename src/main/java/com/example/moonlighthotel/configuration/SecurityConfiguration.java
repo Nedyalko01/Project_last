@@ -3,7 +3,6 @@ package com.example.moonlighthotel.configuration;
 
 import com.example.moonlighthotel.exeptions.CustomHttp403ForbiddenEntryPoint;
 import com.example.moonlighthotel.filter.CustomAccessDeniedHandler;
-import com.example.moonlighthotel.filter.JwtTokenFilter;
 import com.example.moonlighthotel.service.impl.UserServiceImpl;
 import com.example.moonlighthotel.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +15,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import static com.example.moonlighthotel.constant.SecurityConstant.PROTECTED_URLS;
-import static com.example.moonlighthotel.constant.SecurityConstant.PUBLIC_URLS;
 
 @Configuration
 //@EnableWebSecurity
@@ -44,13 +39,13 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorize -> authorize
-                      .antMatchers(PUBLIC_URLS).permitAll()
-                       .antMatchers(PROTECTED_URLS).permitAll()
-                       .antMatchers(HttpMethod.POST, "/users/**", "/rooms/**").permitAll()
-                        .antMatchers(HttpMethod.POST, "/users/token/**").permitAll()
-                       .antMatchers(HttpMethod.GET, "/users/**", "/rooms/**").permitAll()//hasAnyAuthority(ADMIN)
+//                        .antMatchers(PUBLIC_URLS).permitAll()
+//                        .antMatchers(PROTECTED_URLS).permitAll()
+//                        .antMatchers(HttpMethod.POST, "/users/**", "/rooms/**").permitAll()
+//                        .antMatchers(HttpMethod.POST, "/users/token/**").permitAll()
+//                        .antMatchers(HttpMethod.GET, "/users/**", "/rooms/**").permitAll()//hasAnyAuthority(ADMIN)
                         .anyRequest().permitAll())
-                .addFilterBefore(new JwtTokenFilter(jwtTokenUtil, userService), UsernamePasswordAuthenticationFilter.class)
+                //.addFilterBefore(new JwtTokenFilter(jwtTokenUtil, userService), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .and()
                 .exceptionHandling()
