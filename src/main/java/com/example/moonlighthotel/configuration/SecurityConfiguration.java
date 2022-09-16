@@ -13,11 +13,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static com.example.moonlighthotel.constant.SecurityConstant.*;
+
 @Configuration
-//@EnableWebSecurity
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
@@ -37,17 +40,16 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+        http // взима всички Requests - които пристигат
                 .authorizeRequests(authorize -> authorize
-//                        .antMatchers(PUBLIC_URLS).permitAll()
-//                        .antMatchers(PROTECTED_URLS).permitAll()
-//                        .antMatchers(HttpMethod.POST, "/users/**", "/rooms/**").permitAll()
-//                        .antMatchers(HttpMethod.POST, "/users/token/**").permitAll()
-//                        .antMatchers(HttpMethod.GET, "/users/**", "/rooms/**").permitAll()//hasAnyAuthority(ADMIN)
-                        .anyRequest().permitAll())
+                        .antMatchers(PUBLIC_URLS).permitAll() // кой енд-пойнт да минава без Аутентикация
+                        .antMatchers(PROTECTED_URLS).hasAnyAuthority(ADMIN)
+                        .antMatchers(HttpMethod.POST, "/users/*", "/rooms/*").permitAll()
+                        .antMatchers(HttpMethod.GET, "/users", "/rooms").hasAnyAuthority(ADMIN) // проверява Requests за Роля
+                        .anyRequest().denyAll())
                 //.addFilterBefore(new JwtTokenFilter(jwtTokenUtil, userService), UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests()
-                .and()
+                //.authorizeRequests()
+                //.and()
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler)
                 .authenticationEntryPoint(authenticationEntryPint)

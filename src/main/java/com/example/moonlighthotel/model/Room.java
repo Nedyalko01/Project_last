@@ -2,14 +2,15 @@ package com.example.moonlighthotel.model;
 
 import com.example.moonlighthotel.enumerations.RoomType;
 import com.example.moonlighthotel.enumerations.RoomView;
+import lombok.Builder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.awt.*;
 import java.util.List;
 import java.util.Set;
 
 @Entity
+@Builder
 @Table(name = "rooms")
 public class Room {
 

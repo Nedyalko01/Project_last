@@ -3,7 +3,6 @@ package com.example.moonlighthotel.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +17,7 @@ import static com.example.moonlighthotel.constant.SecurityConstant.JWT_TOKEN_VAL
 @Component
 public class JwtTokenUtil {
 
-    @Value("${jwt.secret}")
+    //@Value("${jwt.secret}")
     private String secret;
 
     public String generateToken(UserDetails userDetails) {
@@ -28,7 +27,7 @@ public class JwtTokenUtil {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(Date.from(Instant.now()))
                 .setExpiration(Date.from(Instant.now().plus(JWT_TOKEN_VALIDITY, ChronoUnit.SECONDS)))
-                .signWith(SignatureAlgorithm.HS256, "secret")
+                .signWith(SignatureAlgorithm.HS512, "secret")
                 .compact();
     }
 

@@ -2,6 +2,7 @@ package com.example.moonlighthotel.model;
 
 
 import com.example.moonlighthotel.exeptions.InvalidPhoneNumber;
+import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import static com.example.moonlighthotel.constant.UserConstant.ROLE_PREFIX;
 import static com.example.moonlighthotel.constant.ValidationConstant.*;
 
 @Entity
+@Builder
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
