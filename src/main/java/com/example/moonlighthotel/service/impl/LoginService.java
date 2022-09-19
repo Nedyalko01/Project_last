@@ -45,7 +45,7 @@ public class LoginService {
 
         final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getUsername());
 
-        return null;//jwtTokenUtil.generateToken(userDetails);
+        return jwtTokenUtil.generateToken(userDetails);
     }
 
 

@@ -2,18 +2,18 @@ package com.example.moonlighthotel.service.impl;
 
 import com.example.moonlighthotel.converter.UserConverter;
 import com.example.moonlighthotel.dto.UserRequest;
+import com.example.moonlighthotel.exeptions.RecordNotFoundException;
 import com.example.moonlighthotel.exeptions.UserNotFoundException;
 import com.example.moonlighthotel.model.User;
 import com.example.moonlighthotel.repositories.UserRepository;
 import com.example.moonlighthotel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.example.moonlighthotel.constant.ExceptionConstant.BAD_CREDENTIALS;
@@ -63,6 +63,13 @@ public class UserServiceImpl  implements UserService, UserDetailsService {
         return userRepository.save(dbRole);
     }
 
+    public User findByEmail(String email) {
+        Objects.requireNonNull(email);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RecordNotFoundException(
+                        String.format("User with email:%s, not found.", email)));
+    }
+
     @Override
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
@@ -71,7 +78,7 @@ public class UserServiceImpl  implements UserService, UserDetailsService {
     @Override
     public User loadUserByUsername(String username) {
 
-        return userRepository.findUserByEmail(username)
+        return userRepository.findByEmail(username)
                 .orElseThrow(() -> new BadCredentialsException(BAD_CREDENTIALS));
     }
 }

@@ -3,6 +3,7 @@ package com.example.moonlighthotel.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ import static com.example.moonlighthotel.constant.SecurityConstant.JWT_TOKEN_VAL
 @Component
 public class JwtTokenUtil {
 
-    //@Value("${jwt.secret}")
+    @Value("${jwt.secret}")
     private String secret;
 
     public String generateToken(UserDetails userDetails) {
@@ -27,7 +28,7 @@ public class JwtTokenUtil {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(Date.from(Instant.now()))
                 .setExpiration(Date.from(Instant.now().plus(JWT_TOKEN_VALIDITY, ChronoUnit.SECONDS)))
-                .signWith(SignatureAlgorithm.HS512, "secret")
+                .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
 
@@ -40,7 +41,7 @@ public class JwtTokenUtil {
 
     private Claims getAllClaimsFromToken(String token) {
 
-        return Jwts.parserBuilder().setSigningKey("secret").build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(secret).build().parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {

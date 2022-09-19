@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 public class MoonlighthotelApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MoonlighthotelApplication.class, args);
+ 		SpringApplication.run(MoonlighthotelApplication.class, args);
 	}
 
 }
