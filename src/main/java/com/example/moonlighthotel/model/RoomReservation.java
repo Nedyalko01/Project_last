@@ -1,14 +1,13 @@
 package com.example.moonlighthotel.model;
 
 
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.Builder;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
-import java.util.Date;
 
 @Entity
+@Builder
 public class RoomReservation {
 
     @Id
