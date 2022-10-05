@@ -2,7 +2,7 @@ package com.example.moonlighthotel.controller;
 
 
 import com.example.moonlighthotel.converter.UserConverter;
-import com.example.moonlighthotel.dto.UserResponse;
+import com.example.moonlighthotel.dto.user.UserResponse;
 import com.example.moonlighthotel.model.AuthenticationRequest;
 import com.example.moonlighthotel.model.AuthenticationResponse;
 import com.example.moonlighthotel.service.impl.LoginService;

@@ -1,8 +1,8 @@
 package com.example.moonlighthotel.converter;
 
 import com.example.moonlighthotel.configuration.PasswordEncoder;
-import com.example.moonlighthotel.dto.UserRequest;
-import com.example.moonlighthotel.dto.UserResponse;
+import com.example.moonlighthotel.dto.user.UserRequest;
+import com.example.moonlighthotel.dto.user.UserResponse;
 import com.example.moonlighthotel.model.Role;
 import com.example.moonlighthotel.model.User;
 

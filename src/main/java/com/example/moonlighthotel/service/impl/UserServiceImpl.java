@@ -1,7 +1,10 @@
 package com.example.moonlighthotel.service.impl;
 
+import com.example.moonlighthotel.configuration.PasswordEncoder;
 import com.example.moonlighthotel.converter.UserConverter;
-import com.example.moonlighthotel.dto.UserRequest;
+import com.example.moonlighthotel.dto.EmailRequest;
+import com.example.moonlighthotel.dto.user.PasswordResetRequest;
+import com.example.moonlighthotel.dto.user.UserRequest;
 import com.example.moonlighthotel.exeptions.RecordNotFoundException;
 import com.example.moonlighthotel.exeptions.UserNotFoundException;
 import com.example.moonlighthotel.model.User;
@@ -15,7 +18,9 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
+import static com.example.moonlighthotel.constant.EmailConstant.EMAIL_FORGOT_PASSWORD;
 import static com.example.moonlighthotel.constant.ExceptionConstant.BAD_CREDENTIALS;
 import static com.example.moonlighthotel.constant.ExceptionConstant.USER_NOT_FOUND;
 
@@ -81,4 +86,45 @@ public class UserServiceImpl  implements UserService, UserDetailsService {
         return userRepository.findByEmail(username)
                 .orElseThrow(() -> new BadCredentialsException(BAD_CREDENTIALS));
     }
+
+    public void resetPassword(PasswordResetRequest passwordResetRequest) {
+
+        User user = loadUserByUsername(passwordResetRequest.getEmail());
+
+        if (PasswordEncoder.encoder().matches(passwordResetRequest.getToken(), user.getPassword())) {
+
+            String newPassword = PasswordEncoder.encoder().encode(passwordResetRequest.getPassword());
+
+            user.setPassword(newPassword);
+
+            userRepository.save(user);
+
+        } else {
+
+            throw new BadCredentialsException("Token does not match!");
+        }
+
+    }
+
+    public void forgotPassword(EmailRequest emailRequest) {
+
+        User user = loadUserByUsername(emailRequest.getEmail());
+
+        String newPassword = generateToken();
+
+        user.setPassword(PasswordEncoder.encodePassword(newPassword));
+
+        userRepository.save(user);
+
+        String message = String.format(EMAIL_FORGOT_PASSWORD, user.getFirstName(), newPassword);
+
+
+    }
+
+
+    private String generateToken() {
+
+        return UUID.randomUUID().toString();
+    }
+
 }

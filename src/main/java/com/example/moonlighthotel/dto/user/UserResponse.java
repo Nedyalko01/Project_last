@@ -1,4 +1,4 @@
-package com.example.moonlighthotel.dto;
+package com.example.moonlighthotel.dto.user;
 
 
 import java.time.Instant;

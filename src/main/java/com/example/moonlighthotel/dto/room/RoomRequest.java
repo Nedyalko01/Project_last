@@ -9,9 +9,15 @@ public class RoomRequest extends RoomDto {
 
     private Integer count;
 
-    public RoomRequest(RoomType title, String image,
-                       Set<String> images, String description, RoomView roomView,
-                       Integer area, Integer people, Double price, Integer count) {
+    public RoomRequest(RoomType title,
+                       String image,
+                       Set<String> images,
+                       String description,
+                       RoomView roomView,
+                       Integer area,
+                       Integer people,
+                       Double price,
+                       Integer count) {
         super(title, image, images, description, roomView, area, people, price);
 
         this.count = count;

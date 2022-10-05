@@ -1,6 +1,6 @@
 package com.example.moonlighthotel.service;
 
-import com.example.moonlighthotel.dto.UserRequest;
+import com.example.moonlighthotel.dto.user.UserRequest;
 import com.example.moonlighthotel.model.User;
 
 import java.util.Set;

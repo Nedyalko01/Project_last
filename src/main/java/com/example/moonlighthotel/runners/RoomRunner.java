@@ -25,6 +25,7 @@ public class RoomRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         Room standardSwimmingPoolViewRoom = new Room();
+
         standardSwimmingPoolViewRoom.setTitle(RoomType.STANDARD);
         standardSwimmingPoolViewRoom.setImage("some_picture.jpg");
         standardSwimmingPoolViewRoom.setImages(new HashSet<>());

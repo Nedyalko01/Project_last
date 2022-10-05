@@ -2,8 +2,10 @@ package com.example.moonlighthotel.controller;
 
 
 import com.example.moonlighthotel.converter.UserConverter;
-import com.example.moonlighthotel.dto.UserRequest;
-import com.example.moonlighthotel.dto.UserResponse;
+import com.example.moonlighthotel.dto.EmailRequest;
+import com.example.moonlighthotel.dto.user.PasswordResetRequest;
+import com.example.moonlighthotel.dto.user.UserRequest;
+import com.example.moonlighthotel.dto.user.UserResponse;
 import com.example.moonlighthotel.exeptions.UserNotFoundException;
 import com.example.moonlighthotel.model.User;
 import com.example.moonlighthotel.service.impl.UserServiceImpl;
@@ -39,7 +41,7 @@ public class UserController {
         return new ResponseEntity<>(responseUser, HttpStatus.CREATED);
     }
 
-    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id) {
 
@@ -76,6 +78,7 @@ public class UserController {
     }
 
 
+
     @PostMapping(value = "/{id}")
     public ResponseEntity<UserResponse> update(@PathVariable Long id, @RequestBody UserRequest userRequest) {
 
@@ -83,5 +86,23 @@ public class UserController {
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
+
+    @PostMapping(value = "/reset")
+    public ResponseEntity<HttpStatus> resetPassword(@RequestBody PasswordResetRequest passwordResetRequest){
+        userServiceImpl.resetPassword(passwordResetRequest);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping(value = "/forgot")
+    public ResponseEntity<HttpStatus> forgotPassword(@RequestBody EmailRequest emailRequest) {
+
+        userServiceImpl.forgotPassword(emailRequest);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+
+    }
+
+
 }
 

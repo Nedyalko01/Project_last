@@ -5,7 +5,7 @@ import com.example.moonlighthotel.model.User;
 
 import java.util.List;
 
-public interface RoomReservationService {
+public interface  RoomReservationService {
 
     void save (RoomReservation roomReservation);
 

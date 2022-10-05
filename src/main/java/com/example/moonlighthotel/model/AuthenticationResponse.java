@@ -1,6 +1,6 @@
 package com.example.moonlighthotel.model;
 
-import com.example.moonlighthotel.dto.UserResponse;
+import com.example.moonlighthotel.dto.user.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class AuthenticationResponse {
