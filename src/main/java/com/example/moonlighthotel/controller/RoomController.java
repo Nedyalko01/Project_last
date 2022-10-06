@@ -2,13 +2,16 @@ package com.example.moonlighthotel.controller;
 
 
 import com.example.moonlighthotel.converter.RoomConverter;
+import com.example.moonlighthotel.converter.RoomReservationConverter;
 import com.example.moonlighthotel.dto.room.RoomRequest;
 import com.example.moonlighthotel.dto.room.RoomResponse;
+import com.example.moonlighthotel.dto.roomreservation.RoomReservationRequest;
+import com.example.moonlighthotel.dto.roomreservation.RoomReservationResponse;
 import com.example.moonlighthotel.exeptions.RoomNotFoundException;
 import com.example.moonlighthotel.model.Room;
+import com.example.moonlighthotel.model.RoomReservation;
 import com.example.moonlighthotel.service.RoomReservationService;
 import com.example.moonlighthotel.service.RoomService;
-import com.example.moonlighthotel.service.impl.RoomServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +27,13 @@ public class RoomController {
 
     private final RoomReservationService roomReservationService;
 
-    private final RoomServiceImpl roomServiceImpl;
+
 
     @Autowired
-    public RoomController(RoomService roomService, RoomReservationService roomReservationService, RoomServiceImpl roomServiceImpl) {
+    public RoomController(RoomService roomService, RoomReservationService roomReservationService) {
         this.roomService = roomService;
         this.roomReservationService = roomReservationService;
-        this.roomServiceImpl = roomServiceImpl;
+
     }
 
     @PostMapping
@@ -76,6 +79,22 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
+
+    @PostMapping(value = "/{id}/reservations")
+    public ResponseEntity<RoomReservationResponse> createRoomReservation(@PathVariable Long id,
+                                                                         @RequestBody RoomReservationRequest request) {
+
+        RoomReservation roomReservation = RoomReservationConverter.convertToRoomReservation(id, request);
+        roomReservationService.save(roomReservation);
+
+        RoomReservationResponse roomReservationResponse = RoomReservationConverter.
+                convertToRoomReservationResponse(id, roomReservation);
+
+        return new ResponseEntity<>(roomReservationResponse, HttpStatus.CREATED);
+
+    }
+
+
 
 
 }

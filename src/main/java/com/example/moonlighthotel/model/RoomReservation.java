@@ -1,30 +1,40 @@
 package com.example.moonlighthotel.model;
 
 
+import com.example.moonlighthotel.enumerations.BedType;
 import lombok.Builder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Entity
 @Builder
+@Table(name = "room_reservations")
 public class RoomReservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotNull
     private Instant createdAt;
+    @NotNull
     private Instant checkIn;
+    @NotNull
     private Instant checkOut;
-    private int guests;
+    @NotNull
+    private Integer adults;
 
+    @NotNull
+    private Integer kids;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
+    @NotNull
     private Double totalPrice;
-    private String bedType;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private BedType facilities;
 
     @ManyToOne
     @JoinColumn(name = "room_id", referencedColumnName = "id")
@@ -33,18 +43,29 @@ public class RoomReservation {
     public RoomReservation() {
     }
 
-    public RoomReservation(Long id, Instant createdAt, Instant checkIn, Instant checkOut, int guests,
-                           User user, Double totalPrice, String bedType, Room room) {
+
+
+    public RoomReservation(Long id, Instant createdAt,
+                           @NotNull Instant checkIn,
+                           @NotNull Instant checkOut,
+                           @NotNull Integer adults,
+                           @NotNull Integer kids,
+                           @NotNull User user,
+                           @NotNull Double totalPrice,
+                           @NotNull BedType facilities,
+                           Room room) {
         this.id = id;
         this.createdAt = createdAt;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
-        this.guests = guests;
+        this.adults = adults;
+        this.kids = kids;
         this.user = user;
         this.totalPrice = totalPrice;
-        this.bedType = bedType;
+        this.facilities = facilities;
         this.room = room;
     }
+
 
     public Long getId() {
         return id;
@@ -78,12 +99,20 @@ public class RoomReservation {
         this.checkOut = checkOut;
     }
 
-    public int getGuests() {
-        return guests;
+    public Integer getAdults() {
+        return adults;
     }
 
-    public void setGuests(int guests) {
-        this.guests = guests;
+    public void setAdults(Integer adults) {
+        this.adults = adults;
+    }
+
+    public Integer getKids() {
+        return kids;
+    }
+
+    public void setKids(Integer kids) {
+        this.kids = kids;
     }
 
     public User getUser() {
@@ -102,12 +131,12 @@ public class RoomReservation {
         this.totalPrice = totalPrice;
     }
 
-    public String getBedType() {
-        return bedType;
+    public BedType getFacilities() {
+        return facilities;
     }
 
-    public void setBedType(String bedType) {
-        this.bedType = bedType;
+    public void setFacilities(BedType facilities) {
+        this.facilities = facilities;
     }
 
     public Room getRoom() {
