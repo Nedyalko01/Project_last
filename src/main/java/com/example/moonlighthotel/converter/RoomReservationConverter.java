@@ -79,6 +79,7 @@ public class RoomReservationConverter {
     }
 
 
+
     private static Integer calculateDays(Instant startDate, Instant endDate) {
 
         Long duration = Duration.between(startDate, endDate).toDays();

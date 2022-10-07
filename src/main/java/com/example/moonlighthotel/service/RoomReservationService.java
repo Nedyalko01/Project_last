@@ -1,8 +1,10 @@
 package com.example.moonlighthotel.service;
 
+import com.example.moonlighthotel.model.Room;
 import com.example.moonlighthotel.model.RoomReservation;
 import com.example.moonlighthotel.model.User;
 
+import java.time.Instant;
 import java.util.List;
 
 public interface  RoomReservationService {
@@ -14,4 +16,8 @@ public interface  RoomReservationService {
     List<RoomReservation> getAllRooms (User user);
 
     RoomReservation findById(Long id);
+
+    List<Room> findRoomByPeriodAndPeople(Instant startDate, Instant endDate, int adults, int kids);
+
+    void deleteByRoomIdAndReservationId(Long id, Long rid);
 }

@@ -1,6 +1,7 @@
 package com.example.moonlighthotel.service.impl;
 
 import com.example.moonlighthotel.exeptions.RecordNotFoundException;
+import com.example.moonlighthotel.model.Room;
 import com.example.moonlighthotel.model.RoomReservation;
 import com.example.moonlighthotel.model.User;
 import com.example.moonlighthotel.repositories.RoomReservationRepository;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -54,5 +56,23 @@ public class RoomReservationServiceImpl implements RoomReservationService {
     public RoomReservation findById(Long id) {
         return roomReservationRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException(String.format("Reservation with id: %s, not found", id)));
+    }
+
+    @Override
+    public List<Room> findRoomByPeriodAndPeople(Instant startDate, Instant endDate, int adults, int kids) {
+        return roomReservationRepository.findRoomByPeriodAndPeople(startDate, endDate, (adults + kids));
+    }
+
+    @Override
+    public void deleteByRoomIdAndReservationId(Long id, Long rid) {
+
+        RoomReservation roomReservation = findById(id);
+
+        Room room = roomService.findRoomById(id);
+
+        if (!id.equals(roomReservation.getRoom().getId())) {
+            throw new RuntimeException("Room id does not match to reservation");
+        }
+
     }
 }
