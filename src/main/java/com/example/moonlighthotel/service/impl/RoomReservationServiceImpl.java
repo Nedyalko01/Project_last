@@ -48,7 +48,7 @@ public class RoomReservationServiceImpl implements RoomReservationService {
     }
 
     @Override
-    public List<RoomReservation> getAllRooms(User user) {
+    public List<RoomReservation> getAll() {
         return roomReservationRepository.findAll();
     }
 
@@ -73,6 +73,19 @@ public class RoomReservationServiceImpl implements RoomReservationService {
         if (!id.equals(roomReservation.getRoom().getId())) {
             throw new RuntimeException("Room id does not match to reservation");
         }
+
+    }
+
+    public RoomReservation findReservationByIdAndUserId (Long uid, Long rid) {
+
+        User user = userService.findUserById(uid);
+        RoomReservation roomReservation = findById(rid);
+
+        if (!roomReservation.getUser().getId().equals(uid)) {
+            throw new RuntimeException("User id - does not match to reservation");
+        }
+        return roomReservation;
+
 
     }
 }

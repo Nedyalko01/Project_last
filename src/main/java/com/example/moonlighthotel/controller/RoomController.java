@@ -29,9 +29,7 @@ import static com.example.moonlighthotel.constant.ExceptionConstant.ROOM_NOT_FOU
 public class RoomController {
 
     private final RoomService roomService;
-
     private final RoomReservationService roomReservationService;
-
 
 
     @Autowired

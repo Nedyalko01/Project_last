@@ -1,13 +1,17 @@
 package com.example.moonlighthotel.controller;
 
 
+import com.example.moonlighthotel.converter.RoomReservationConverter;
 import com.example.moonlighthotel.converter.UserConverter;
 import com.example.moonlighthotel.dto.EmailRequest;
 import com.example.moonlighthotel.dto.user.PasswordResetRequest;
 import com.example.moonlighthotel.dto.user.UserRequest;
+import com.example.moonlighthotel.dto.user.UserReservationResponse;
 import com.example.moonlighthotel.dto.user.UserResponse;
 import com.example.moonlighthotel.exeptions.UserNotFoundException;
+import com.example.moonlighthotel.model.RoomReservation;
 import com.example.moonlighthotel.model.User;
+import com.example.moonlighthotel.service.RoomReservationService;
 import com.example.moonlighthotel.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.example.moonlighthotel.constant.ExceptionConstant.BAD_CREDENTIALS;
 
@@ -27,9 +33,12 @@ public class UserController {
 
     private final UserServiceImpl userServiceImpl;
 
+    private final RoomReservationService roomReservationService;
+
     @Autowired
-    public UserController(UserServiceImpl userServiceImpl) {
+    public UserController(UserServiceImpl userServiceImpl, RoomReservationService roomReservationService) {
         this.userServiceImpl = userServiceImpl;
+        this.roomReservationService = roomReservationService;
     }
 
     @PostMapping
@@ -100,6 +109,48 @@ public class UserController {
         userServiceImpl.forgotPassword(emailRequest);
 
         return new ResponseEntity<>(HttpStatus.OK);
+
+    }
+
+    @GetMapping(value = "/reservations")
+    public ResponseEntity<List<UserReservationResponse>> getReservations() {
+
+        List<RoomReservation> reservations = roomReservationService.getAll();
+
+        List<UserReservationResponse> reservationResponses = reservations
+                .stream()
+                .map(RoomReservationConverter::convertToUserReservationResponse)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(reservationResponses, HttpStatus.OK);
+
+    }
+    @GetMapping(value = "/{id}/reservations")
+    public ResponseEntity<List<UserReservationResponse>> getReservationsByUserId(@PathVariable Long id) {
+
+        User user = userServiceImpl.findUserById(id);
+
+        List<RoomReservation> reservations = roomReservationService.getByUserId(user);
+
+        List<UserReservationResponse> userReservationResponses = reservations
+                .stream()
+                .map(RoomReservationConverter::convertToUserReservationResponse)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(userReservationResponses, HttpStatus.OK);
+
+    }
+
+
+    @GetMapping(value = "/{id}/reservations/{rid}")
+    public ResponseEntity<UserReservationResponse> getReservationByIdAndUserId(@PathVariable Long uid,
+                                                                               @PathVariable Long rid) {
+
+        RoomReservation roomReservation = roomReservationService.findReservationByIdAndUserId(uid, rid);
+
+        UserReservationResponse userReservationResponse = RoomReservationConverter.convertToUserReservationResponse(roomReservation);
+
+        return new ResponseEntity<>(userReservationResponse, HttpStatus.OK);
 
     }
 

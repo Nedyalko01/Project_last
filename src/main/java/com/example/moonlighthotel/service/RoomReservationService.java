@@ -13,11 +13,13 @@ public interface  RoomReservationService {
 
     List<RoomReservation> getByUserId (User user);
 
-    List<RoomReservation> getAllRooms (User user);
+    List<RoomReservation> getAll ();
 
     RoomReservation findById(Long id);
 
     List<Room> findRoomByPeriodAndPeople(Instant startDate, Instant endDate, int adults, int kids);
 
     void deleteByRoomIdAndReservationId(Long id, Long rid);
+
+    RoomReservation findReservationByIdAndUserId(Long uid, Long rid);
 }
