@@ -1,8 +1,8 @@
 package com.example.moonlighthotel.model;
 
 
+import javax.persistence.Table;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 
