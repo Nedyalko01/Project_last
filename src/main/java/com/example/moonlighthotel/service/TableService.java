@@ -10,4 +10,6 @@ public interface TableService {
 
     void deleteTable(Long id);
 
+    Table findByTableNumber(int number);
+
 }

@@ -31,4 +31,10 @@ public class TableServiceImpl implements TableService {
     public void deleteTable(Long id) {
         tableRepository.deleteById(id);
     }
+
+    @Override
+    public Table findByTableNumber(int number) {
+        return tableRepository.findByNumber(number)
+                .orElseThrow(() -> new RecordNotFoundException(String.format("Table with number: %d, not found", number)));
+    }
 }

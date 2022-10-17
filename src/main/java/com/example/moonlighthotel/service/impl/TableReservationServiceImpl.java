@@ -1,5 +1,8 @@
 package com.example.moonlighthotel.service.impl;
 
+import com.example.moonlighthotel.controller.TableReservationConverter;
+import com.example.moonlighthotel.dto.restaurant.TableReservationUpdateRequest;
+import com.example.moonlighthotel.exeptions.RecordNotFoundException;
 import com.example.moonlighthotel.model.Table;
 import com.example.moonlighthotel.model.TableReservation;
 import com.example.moonlighthotel.model.User;
@@ -52,5 +55,24 @@ public class TableReservationServiceImpl implements TableReservationService {
         User foundUser = userService.findUserById(id);
 
         return tableReservationRepository.findByUser(foundUser);
+    }
+
+    @Override
+    public void updateTableReservation(Long id, Long rid, TableReservationUpdateRequest request) {
+
+        Table foundTable = tableService.findById(id);
+
+        TableReservation foundTableReservation = findTableReservationById(rid);
+
+        TableReservation updatedTableReservation = TableReservationConverter.update(foundTableReservation, request);
+
+        save(updatedTableReservation);
+
+    }
+
+    public TableReservation findTableReservationById(Long id) {
+
+        return tableReservationRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException(String.format("Table reservation with id: %s, not found", id)));
     }
 }

@@ -4,6 +4,7 @@ import com.example.moonlighthotel.converter.TableConverter;
 import com.example.moonlighthotel.converter.UserConverter;
 import com.example.moonlighthotel.dto.restaurant.TableReservationRequest;
 import com.example.moonlighthotel.dto.restaurant.TableReservationResponse;
+import com.example.moonlighthotel.dto.restaurant.TableReservationUpdateRequest;
 import com.example.moonlighthotel.dto.restaurant.TableResponse;
 import com.example.moonlighthotel.dto.user.UserResponse;
 import com.example.moonlighthotel.model.Table;
@@ -63,8 +64,20 @@ public class TableReservationConverter {
                     .addUser(userResponse)
                     .build();
 
+    }
 
+    public static TableReservation update(TableReservation tableReservation, TableReservationUpdateRequest request) {
 
+    User user = userService.findUserById(request.getUser());
+
+    Table table = tableService.findByTableNumber(request.getTable());
+
+    tableReservation.setUser(user);
+    tableReservation.setTable(table);
+    tableReservation.setPeople(request.getPeople());
+    tableReservation.setPrice(request.getPrice());
+
+    return tableReservation;
 
 
     }
