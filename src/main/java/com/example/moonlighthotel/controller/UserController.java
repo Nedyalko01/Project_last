@@ -4,14 +4,17 @@ package com.example.moonlighthotel.controller;
 import com.example.moonlighthotel.converter.RoomReservationConverter;
 import com.example.moonlighthotel.converter.UserConverter;
 import com.example.moonlighthotel.dto.EmailRequest;
+import com.example.moonlighthotel.dto.restaurant.TableReservationResponse;
 import com.example.moonlighthotel.dto.user.PasswordResetRequest;
 import com.example.moonlighthotel.dto.user.UserRequest;
 import com.example.moonlighthotel.dto.user.UserReservationResponse;
 import com.example.moonlighthotel.dto.user.UserResponse;
 import com.example.moonlighthotel.exeptions.UserNotFoundException;
 import com.example.moonlighthotel.model.RoomReservation;
+import com.example.moonlighthotel.model.TableReservation;
 import com.example.moonlighthotel.model.User;
 import com.example.moonlighthotel.service.RoomReservationService;
+import com.example.moonlighthotel.service.TableReservationService;
 import com.example.moonlighthotel.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,13 +35,14 @@ import static com.example.moonlighthotel.constant.ExceptionConstant.BAD_CREDENTI
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;
-
     private final RoomReservationService roomReservationService;
+    private final TableReservationService tableReservationService;
 
     @Autowired
-    public UserController(UserServiceImpl userServiceImpl, RoomReservationService roomReservationService) {
+    public UserController(UserServiceImpl userServiceImpl, RoomReservationService roomReservationService, TableReservationService tableReservationService) {
         this.userServiceImpl = userServiceImpl;
         this.roomReservationService = roomReservationService;
+        this.tableReservationService = tableReservationService;
     }
 
     @PostMapping
@@ -151,6 +155,20 @@ public class UserController {
         UserReservationResponse userReservationResponse = RoomReservationConverter.convertToUserReservationResponse(roomReservation);
 
         return new ResponseEntity<>(userReservationResponse, HttpStatus.OK);
+
+    }
+
+    @GetMapping(value = "/{id}/tables/reservations")
+    public ResponseEntity<List<TableReservationResponse>> getTableReservationsByUser(@PathVariable Long id) {
+
+        List<TableReservation> tableReservations = tableReservationService.getTableReservationsByUser(id);
+
+        List<TableReservationResponse> response = tableReservations
+                .stream()
+                .map(tableReservation -> TableReservationConverter.convertToTableReservationResponse(tableReservation))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 

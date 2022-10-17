@@ -3,9 +3,11 @@ package com.example.moonlighthotel.controller;
 
 import com.example.moonlighthotel.converter.TableConverter;
 import com.example.moonlighthotel.dto.restaurant.TableRequest;
+import com.example.moonlighthotel.dto.restaurant.TableReservationResponse;
 import com.example.moonlighthotel.dto.restaurant.TableResponse;
 import com.example.moonlighthotel.exeptions.RecordNotFoundException;
 import com.example.moonlighthotel.model.Table;
+import com.example.moonlighthotel.model.TableReservation;
 import com.example.moonlighthotel.service.TableReservationService;
 import com.example.moonlighthotel.service.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/tables")
@@ -64,5 +69,19 @@ public class RestaurantController {
         } catch (Exception ex) {
             throw new RecordNotFoundException(String.format("Table reservation with id: %d, not found", rid));
         }
+
+    }
+
+    @GetMapping(value = "/{id}/reservations")
+    public ResponseEntity<List<TableReservationResponse>> getAllReservationsByTable(@PathVariable Long id) {
+
+        List<TableReservation> tableReservations = tableReservationService.getAllReservationsByTable(id);
+
+        List<TableReservationResponse> tableResponse = tableReservations
+                .stream()
+                .map(tableReservation -> TableReservationConverter.convertToTableReservationResponse(tableReservation))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(tableResponse, HttpStatus.OK);
     }
 }

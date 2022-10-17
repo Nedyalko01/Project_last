@@ -10,10 +10,12 @@ import com.example.moonlighthotel.model.RoomReservation;
 import com.example.moonlighthotel.model.User;
 import com.example.moonlighthotel.service.impl.RoomServiceImpl;
 import com.example.moonlighthotel.service.impl.UserServiceImpl;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.Instant;
 
+@Component
 public class RoomReservationConverter {
 
     private static UserServiceImpl userService;
