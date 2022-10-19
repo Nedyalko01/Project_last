@@ -8,7 +8,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -19,8 +18,9 @@ import java.io.IOException;
 
 import static com.example.moonlighthotel.constant.SecurityConstant.*;
 
-@Component
+
 public class JwtTokenFilter extends OncePerRequestFilter {
+
     private final JwtTokenUtil jwtTokenUtil;
     private final UserServiceImpl userService;
 

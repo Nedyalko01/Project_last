@@ -1,5 +1,7 @@
-package com.example.moonlighthotel.model;
+package com.example.moonlighthotel.model.table;
 
+
+import com.example.moonlighthotel.model.User;
 
 import javax.persistence.*;
 import javax.persistence.Table;
@@ -26,7 +28,7 @@ public class TableReservation {
 
     @ManyToOne
     @JoinColumn(name = "table_id")
-    private com.example.moonlighthotel.model.Table table;
+    private com.example.moonlighthotel.model.table.Table table;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -36,7 +38,7 @@ public class TableReservation {
     }
 
     public TableReservation(Long id, Instant date, int people, double price, String updated,
-                            com.example.moonlighthotel.model.Table table, User user) {
+                            com.example.moonlighthotel.model.table.Table table, User user) {
         this.id = id;
         this.date = date;
         this.people = people;
@@ -86,11 +88,11 @@ public class TableReservation {
         this.updated = updated;
     }
 
-    public com.example.moonlighthotel.model.Table getTable() {
+    public com.example.moonlighthotel.model.table.Table getTable() {
         return table;
     }
 
-    public void setTable(com.example.moonlighthotel.model.Table table) {
+    public void setTable(com.example.moonlighthotel.model.table.Table table) {
         this.table = table;
     }
 

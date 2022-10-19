@@ -1,10 +1,12 @@
 package com.example.moonlighthotel.service.impl;
 
 import com.example.moonlighthotel.controller.TableReservationConverter;
+import com.example.moonlighthotel.dto.restaurant.TableReservationRequest;
 import com.example.moonlighthotel.dto.restaurant.TableReservationUpdateRequest;
+import com.example.moonlighthotel.enumerations.TableZone;
 import com.example.moonlighthotel.exeptions.RecordNotFoundException;
-import com.example.moonlighthotel.model.Table;
-import com.example.moonlighthotel.model.TableReservation;
+import com.example.moonlighthotel.model.table.Table;
+import com.example.moonlighthotel.model.table.TableReservation;
 import com.example.moonlighthotel.model.User;
 import com.example.moonlighthotel.repositories.TableReservationRepository;
 import com.example.moonlighthotel.service.TableReservationService;
@@ -13,6 +15,7 @@ import com.example.moonlighthotel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -75,4 +78,38 @@ public class TableReservationServiceImpl implements TableReservationService {
         return tableReservationRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException(String.format("Table reservation with id: %s, not found", id)));
     }
-}
+
+    @Override
+    public TableReservation getReservationByIdAndTableId(Long id, Long rid) {
+
+        Table table = tableService.findById(id);
+
+        TableReservation tableReservation = findTableReservationById(rid);
+
+        if (!id.equals(tableReservation.getTable().getId())) {
+            throw new RuntimeException("Table id does not match");
+        }
+
+        return tableReservation;
+
+    }
+
+    @Override
+    public List<Table> getAllAvailableTables(int people, TableZone zone, String date, String hour) {
+
+        Instant dateToReserve = TableReservationConverter.convertRequestDateAndHourToInstant(date, hour);
+
+        Instant start = dateToReserve.minusSeconds(3600);
+        Instant end = dateToReserve.plusSeconds(3600);
+
+        return tableReservationRepository.getAllAvailableTables(people, zone, start, end);
+    }
+
+    @Override
+    public TableReservation summarizeTableReservation(Long id, TableReservationRequest request, User user) {
+
+        Table foundTable = tableService.findById(id);
+
+        return TableReservationConverter.convertToTableReservation(id, request, user);
+    }
+    }

@@ -4,6 +4,7 @@ public class SecurityConstant {
 
     public static final Long JWT_TOKEN_VALIDITY = 10 * 60 * 60L;
     public static final String AUTHORITIES = "authorities";
+
     public static final String USERNAME = "username";
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String AUTHORIZATION = "Authorization";
@@ -16,6 +17,6 @@ public class SecurityConstant {
     public static final String ADMIN = "ROLE_ADMIN";
     public static final String ACCESS_DENIED_MESSAGE = "Access denied";
 
-    public static final String[] PUBLIC_URLS = {"/users", "/users/token",};
+    public static final String[] PUBLIC_URLS = {"/users", "/users/token","/login"};
     public static final String[] PROTECTED_URLS = {"/users/*"};
 }

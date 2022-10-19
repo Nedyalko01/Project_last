@@ -1,4 +1,4 @@
-package com.example.moonlighthotel.model;
+package com.example.moonlighthotel.model.table;
 
 import com.example.moonlighthotel.enumerations.TableZone;
 

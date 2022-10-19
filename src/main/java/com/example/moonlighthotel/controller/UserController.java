@@ -11,10 +11,11 @@ import com.example.moonlighthotel.dto.user.UserReservationResponse;
 import com.example.moonlighthotel.dto.user.UserResponse;
 import com.example.moonlighthotel.exeptions.UserNotFoundException;
 import com.example.moonlighthotel.model.RoomReservation;
-import com.example.moonlighthotel.model.TableReservation;
 import com.example.moonlighthotel.model.User;
+import com.example.moonlighthotel.model.table.TableReservation;
 import com.example.moonlighthotel.service.RoomReservationService;
 import com.example.moonlighthotel.service.TableReservationService;
+import com.example.moonlighthotel.service.impl.EmailServiceImpl;
 import com.example.moonlighthotel.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.example.moonlighthotel.constant.EmailConstant.EMAIL_SUBJECT;
+import static com.example.moonlighthotel.constant.EmailConstant.EMAIL_TEXT;
 import static com.example.moonlighthotel.constant.ExceptionConstant.BAD_CREDENTIALS;
 
 @RestController
@@ -38,21 +41,32 @@ public class UserController {
     private final RoomReservationService roomReservationService;
     private final TableReservationService tableReservationService;
 
+    private final EmailServiceImpl emailService;
+
     @Autowired
-    public UserController(UserServiceImpl userServiceImpl, RoomReservationService roomReservationService, TableReservationService tableReservationService) {
+    public UserController(UserServiceImpl userServiceImpl, RoomReservationService roomReservationService, TableReservationService tableReservationService, EmailServiceImpl emailService) {
         this.userServiceImpl = userServiceImpl;
         this.roomReservationService = roomReservationService;
         this.tableReservationService = tableReservationService;
+        this.emailService = emailService;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest userRequest) {
+
         User newUser =  userServiceImpl.register(userRequest);
 
         UserResponse responseUser = UserConverter.convertToUserDto(newUser);
+
+        String emailText = String.format(EMAIL_TEXT, userRequest.getName(), userRequest.getPassword());
+
+        emailService.sendEmail(userRequest.getEmail(), EMAIL_SUBJECT, emailText);
+
         return new ResponseEntity<>(responseUser, HttpStatus.CREATED);
     }
+
+
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
@@ -103,9 +117,11 @@ public class UserController {
 
     @PostMapping(value = "/reset")
     public ResponseEntity<HttpStatus> resetPassword(@RequestBody PasswordResetRequest passwordResetRequest){
+
         userServiceImpl.resetPassword(passwordResetRequest);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @PostMapping(value = "/forgot")
     public ResponseEntity<HttpStatus> forgotPassword(@RequestBody EmailRequest emailRequest) {

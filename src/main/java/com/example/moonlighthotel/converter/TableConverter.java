@@ -3,9 +3,19 @@ package com.example.moonlighthotel.converter;
 import com.example.moonlighthotel.dto.restaurant.TableRequest;
 import com.example.moonlighthotel.dto.restaurant.TableResponse;
 import com.example.moonlighthotel.enumerations.TableZone;
-import com.example.moonlighthotel.model.Table;
+import com.example.moonlighthotel.model.table.Table;
 
 public class TableConverter {
+
+
+   public static Table update(Table table, TableRequest request) {
+       table.setZone(request.getZone());
+       table.setNumber(request.getNumber());
+       table.setPeople(request.getPeople());
+
+       return table;
+
+   }
 
     public static Table convertToTable(TableRequest tableRequest) {
 

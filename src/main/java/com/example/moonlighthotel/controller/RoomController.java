@@ -16,7 +16,6 @@ import com.example.moonlighthotel.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -66,7 +65,7 @@ public class RoomController {
 
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<RoomResponse> findById(@PathVariable Long id) {
 
@@ -75,7 +74,7 @@ public class RoomController {
         return new ResponseEntity<>(room, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long id, @RequestBody RoomRequest request) {
 
@@ -87,7 +86,7 @@ public class RoomController {
 
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id) {
 
@@ -100,7 +99,7 @@ public class RoomController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ROLE_CLIENT')")
+    //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
     @GetMapping
     public ResponseEntity<List<RoomResponse>> getAvailableRoomsByPeriodAndGuests(@RequestBody AvailableRoomRequest request) {
 
@@ -132,11 +131,6 @@ public class RoomController {
     }
 
 
+    }
 
-
-
-
-
-
-}
 

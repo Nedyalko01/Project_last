@@ -1,9 +1,7 @@
 package com.example.moonlighthotel.configuration;
 
-
 import com.example.moonlighthotel.exeptions.CustomHttp403ForbiddenEntryPoint;
 import com.example.moonlighthotel.filter.CustomAccessDeniedHandler;
-import com.example.moonlighthotel.filter.JwtTokenFilter;
 import com.example.moonlighthotel.service.impl.UserServiceImpl;
 import com.example.moonlighthotel.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +15,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static com.example.moonlighthotel.constant.SecurityConstant.*;
+import static com.example.moonlighthotel.constant.SecurityConstant.PROTECTED_URLS;
+import static com.example.moonlighthotel.constant.SecurityConstant.PUBLIC_URLS;
+
 
 @Configuration
 @EnableWebSecurity
@@ -45,16 +46,21 @@ public class SecurityConfiguration {
         http
                 .authorizeRequests(authorize -> authorize
                         .antMatchers(PUBLIC_URLS).permitAll()
-                        .antMatchers(PROTECTED_URLS).hasAnyAuthority(ADMIN)
+                        //.antMatchers(PROTECTED_URLS).hasAnyAuthority(ADMIN)
+                        .antMatchers(PROTECTED_URLS).permitAll()
                         .antMatchers(HttpMethod.POST, "/users", "/rooms").permitAll()
-                        .antMatchers(HttpMethod.GET, "/users", "/rooms").hasAnyAuthority(ADMIN)
-                        .anyRequest().denyAll())
-                .addFilterBefore(new JwtTokenFilter(jwtTokenUtil, userService), UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests()
-                .and()
+                        .antMatchers(HttpMethod.GET, "/users", "/rooms").permitAll()
+                        //.antMatchers(HttpMethod.GET, "/users", "/rooms").hasAnyAuthority(ADMIN)
+                        //.anyRequest().denyAll())
+                        .anyRequest().permitAll())
+                //.addFilterBefore(new JwtTokenFilter(jwtTokenUtil, userService), UsernamePasswordAuthenticationFilter.class)
+                //.authorizeRequests()
+                //.and()
                 .exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler)
-                .authenticationEntryPoint(authenticationEntryPint)
+                //.accessDeniedHandler(accessDeniedHandler)
+                //.authenticationEntryPoint(authenticationEntryPint)
+                .and()
+                .cors()
                 .and()
                 .csrf().disable();
 
@@ -71,5 +77,17 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry
+                        .addMapping("*")
+                        .allowedOrigins("");
+            }
+        };
     }
 }

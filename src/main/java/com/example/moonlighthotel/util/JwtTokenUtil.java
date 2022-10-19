@@ -12,6 +12,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.function.Function;
 
+
 import static com.example.moonlighthotel.constant.SecurityConstant.AUTHORITIES;
 import static com.example.moonlighthotel.constant.SecurityConstant.JWT_TOKEN_VALIDITY;
 
@@ -66,5 +67,16 @@ public class JwtTokenUtil {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+

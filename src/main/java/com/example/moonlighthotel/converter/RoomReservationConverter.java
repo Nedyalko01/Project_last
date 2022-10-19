@@ -73,6 +73,7 @@ public class RoomReservationConverter {
         roomReservationResponse.setId(roomReservation.getId());
         roomReservationResponse.setStart_date(roomReservation.getCheckIn().toString());
         roomReservationResponse.setEnd_date(roomReservation.getCheckOut().toString());
+        roomReservationResponse.setDays(daysPeriod);
         roomReservationResponse.setAdults(roomReservation.getAdults());
         roomReservationResponse.setKids(roomReservation.getKids());
         roomReservationResponse.setPrice(totalPrice);

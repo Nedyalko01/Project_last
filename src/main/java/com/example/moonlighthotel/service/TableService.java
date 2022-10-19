@@ -1,6 +1,7 @@
 package com.example.moonlighthotel.service;
 
-import com.example.moonlighthotel.model.Table;
+import com.example.moonlighthotel.dto.restaurant.TableRequest;
+import com.example.moonlighthotel.model.table.Table;
 
 public interface TableService {
 
@@ -11,5 +12,7 @@ public interface TableService {
     void deleteTable(Long id);
 
     Table findByTableNumber(int number);
+
+    void update(Long id, TableRequest request);
 
 }

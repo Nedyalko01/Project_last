@@ -1,7 +1,9 @@
 package com.example.moonlighthotel.service.impl;
 
+import com.example.moonlighthotel.converter.TableConverter;
+import com.example.moonlighthotel.dto.restaurant.TableRequest;
 import com.example.moonlighthotel.exeptions.RecordNotFoundException;
-import com.example.moonlighthotel.model.Table;
+import com.example.moonlighthotel.model.table.Table;
 import com.example.moonlighthotel.repositories.TableRepository;
 import com.example.moonlighthotel.service.TableService;
 import org.springframework.stereotype.Service;
@@ -36,5 +38,14 @@ public class TableServiceImpl implements TableService {
     public Table findByTableNumber(int number) {
         return tableRepository.findByNumber(number)
                 .orElseThrow(() -> new RecordNotFoundException(String.format("Table with number: %d, not found", number)));
+    }
+
+    @Override
+    public void update(Long id, TableRequest request) {
+
+        Table table = findById(id);
+
+        save(TableConverter.update(table, request));
+
     }
 }
