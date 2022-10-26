@@ -2,6 +2,7 @@ package com.example.moonlighthotel.controller;
 
 
 import com.example.moonlighthotel.converter.TableConverter;
+import com.example.moonlighthotel.converter.TableReservationConverter;
 import com.example.moonlighthotel.dto.restaurant.*;
 import com.example.moonlighthotel.enumerations.TableZone;
 import com.example.moonlighthotel.exeptions.RecordNotFoundException;
@@ -14,6 +15,7 @@ import com.example.moonlighthotel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +39,7 @@ public class RestaurantController {
     }
 
 
-    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<TableResponse> createTable(@RequestBody TableRequest request) {
 
@@ -50,7 +52,7 @@ public class RestaurantController {
 
     }
 
-    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<HttpStatus> deleteTableById(@PathVariable Long id) {
 
@@ -103,7 +105,7 @@ public class RestaurantController {
     }
 
 
-    //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
     @PostMapping(value = "/{id}/reservations")
     public ResponseEntity<TableReservationResponse> createTableReservation(@PathVariable Long id,
                                                                            @RequestBody TableReservationRequest request,
@@ -111,6 +113,7 @@ public class RestaurantController {
         User foundUser = userService.findUserById(user.getId());
 
         TableReservation tableReservation = TableReservationConverter.convertToTableReservation(id, request, foundUser);
+
         tableReservationService.save(tableReservation);
 
         TableReservationResponse response = TableReservationConverter.convertToTableReservationResponse(tableReservation);
@@ -171,4 +174,6 @@ public class RestaurantController {
 
         return new ResponseEntity<>(tableReservationResponse, HttpStatus.OK);
     }
+
+
 }

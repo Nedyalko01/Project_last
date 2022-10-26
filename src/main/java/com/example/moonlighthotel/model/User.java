@@ -1,7 +1,8 @@
 package com.example.moonlighthotel.model;
 
 
-import com.example.moonlighthotel.exeptions.InvalidPhoneNumber;
+import com.example.moonlighthotel.model.car.CarTransfer;
+import com.example.moonlighthotel.model.table.TableReservation;
 import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,12 +15,14 @@ import java.time.Instant;
 import java.util.*;
 
 import static com.example.moonlighthotel.constant.UserConstant.ROLE_PREFIX;
-import static com.example.moonlighthotel.constant.ValidationConstant.*;
+import static com.example.moonlighthotel.constant.ValidationConstant.INVALID_EMAIL;
+import static com.example.moonlighthotel.constant.ValidationConstant.INVALID_PHONE_SIZE;
 
-@Entity
 @Builder
-@Table(name = "users")
+@Entity
+@Table(name = "users", indexes = @Index(name = "user_name_index", columnList = "firstName, lastName"))
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -57,11 +60,18 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<RoomReservation> reservations;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<TableReservation> tableReservations;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CarTransfer> transfers;
+
     public User() {
     }
 
     public User(Long id, String firstName, String lastName, String email, String phoneNumber, String password, Set<Role> roles,
-                Instant createdAt, List<RoomReservation> reservations) {
+                Instant createdAt, List<RoomReservation> reservations, List<TableReservation> tableReservations,
+                List<CarTransfer> transfers) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -71,6 +81,8 @@ public class User implements UserDetails {
         this.roles = roles;
         this.createdAt = createdAt;
         this.reservations = reservations;
+        this.tableReservations = tableReservations;
+        this.transfers = transfers;
     }
 
     public Long getId() {
@@ -109,14 +121,7 @@ public class User implements UserDetails {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-
-        if (phoneNumber.startsWith("+") || phoneNumber.startsWith("00")) {
-            this.phoneNumber = phoneNumber;
-        } else {
-            throw new InvalidPhoneNumber(INVALID_PHONE);
-        }
-    }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
     public void setPassword(String password) {
         this.password = password;
@@ -146,11 +151,25 @@ public class User implements UserDetails {
         this.reservations = reservations;
     }
 
+    public List<TableReservation> getTableReservations() {
+        return tableReservations;
+    }
+
+    public void setTableReservations(List<TableReservation> tableReservations) {
+        this.tableReservations = tableReservations;
+    }
+
+    public List<CarTransfer> getTransfers() {
+        return transfers;
+    }
+
+    public void setTransfers(List<CarTransfer> transfers) {
+        this.transfers = transfers;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
         for (Role role : roles) {
             String name = role.getAuthority().toUpperCase();
             if (!name.startsWith(ROLE_PREFIX)) {
@@ -163,11 +182,10 @@ public class User implements UserDetails {
     }
 
     public Set<String> getAuthorityName() {
-
         Set<String> authorities = new HashSet<>();
-
         for (Role role : roles) {
             String name = role.getAuthority().toUpperCase();
+
             authorities.add(name);
         }
 
@@ -203,4 +221,3 @@ public class User implements UserDetails {
         return true;
     }
 }
-

@@ -17,6 +17,6 @@ public class SecurityConstant {
     public static final String ADMIN = "ROLE_ADMIN";
     public static final String ACCESS_DENIED_MESSAGE = "Access denied";
 
-    public static final String[] PUBLIC_URLS = {"/users", "/users/token","/login"};
+    public static final String[] PUBLIC_URLS = {"/users", "/users/token","/login", "/tables/{id}/reservations"};
     public static final String[] PROTECTED_URLS = {"/users/*"};
 }

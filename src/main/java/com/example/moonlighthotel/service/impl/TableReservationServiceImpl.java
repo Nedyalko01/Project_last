@@ -1,6 +1,6 @@
 package com.example.moonlighthotel.service.impl;
 
-import com.example.moonlighthotel.controller.TableReservationConverter;
+import com.example.moonlighthotel.converter.TableReservationConverter;
 import com.example.moonlighthotel.dto.restaurant.TableReservationRequest;
 import com.example.moonlighthotel.dto.restaurant.TableReservationUpdateRequest;
 import com.example.moonlighthotel.enumerations.TableZone;

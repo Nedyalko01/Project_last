@@ -2,6 +2,7 @@ package com.example.moonlighthotel.controller;
 
 
 import com.example.moonlighthotel.converter.RoomReservationConverter;
+import com.example.moonlighthotel.converter.TableReservationConverter;
 import com.example.moonlighthotel.converter.UserConverter;
 import com.example.moonlighthotel.dto.EmailRequest;
 import com.example.moonlighthotel.dto.restaurant.TableReservationResponse;
@@ -57,7 +58,7 @@ public class UserController {
 
         User newUser =  userServiceImpl.register(userRequest);
 
-        UserResponse responseUser = UserConverter.convertToUserDto(newUser);
+        UserResponse responseUser = UserConverter.convertToUserResponse(newUser);
 
         String emailText = String.format(EMAIL_TEXT, userRequest.getName(), userRequest.getPassword());
 
@@ -68,7 +69,7 @@ public class UserController {
 
 
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id) {
 
@@ -86,7 +87,7 @@ public class UserController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserResponse> findById(@PathVariable Long id) {
 
-        UserResponse user = UserConverter.convertToUserDto(userServiceImpl.findUserById(id));
+        UserResponse user = UserConverter.convertToUserResponse(userServiceImpl.findUserById(id));
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -98,7 +99,7 @@ public class UserController {
         Set<UserResponse> userResponses = new HashSet<>();
 
         for (User user : userServiceImpl.getUsers()) {
-            userResponses.add(UserConverter.convertToUserDto(user));
+            userResponses.add(UserConverter.convertToUserResponse(user));
         }
 
         return ResponseEntity.ok(userResponses);
@@ -109,7 +110,7 @@ public class UserController {
     @PostMapping(value = "/{id}")
     public ResponseEntity<UserResponse> update(@PathVariable Long id, @RequestBody UserRequest userRequest) {
 
-        UserResponse user = UserConverter.convertToUserDto(userServiceImpl.updateUser(id, userRequest));
+        UserResponse user = UserConverter.convertToUserResponse(userServiceImpl.updateUser(id, userRequest));
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -162,7 +163,7 @@ public class UserController {
     }
 
 
-    @GetMapping(value = "/{id}/reservations/{rid}")
+    @GetMapping(value = "/{uid}/reservations/{rid}")
     public ResponseEntity<UserReservationResponse> getReservationByIdAndUserId(@PathVariable Long uid,
                                                                                @PathVariable Long rid) {
 

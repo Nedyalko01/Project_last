@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping(value = "cars", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/cars", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TransferController {
 
     private final CarService carService;
@@ -41,7 +41,7 @@ public class TransferController {
     }
 
 
-    @PostMapping(value = "categories")
+    @PostMapping(value = "/categories")
     public ResponseEntity<CarCategoryResponse> createCarCategory(@RequestBody CarCategoryRequest request) {
 
         CarCategory carCategory = CarCategoryConverter.convertToCarCategory(request);
@@ -109,8 +109,10 @@ public class TransferController {
 
         return new ResponseEntity<>(carCategoryResponse, HttpStatus.OK);
     }
+
     @PostMapping(value = "/{id}/transfers")
-    public ResponseEntity<CarTransferResponse> createCarTransfer(@PathVariable Long id, @RequestBody CarTransferRequest carTransferRequest,
+    public ResponseEntity<CarTransferResponse> createCarTransfer(@PathVariable Long id,
+                                                                 @RequestBody CarTransferRequest carTransferRequest,
                                                                  @AuthenticationPrincipal User user) {
 
         CarTransfer carTransfer = carTransferService.createCarTransfer(id, carTransferRequest, user);

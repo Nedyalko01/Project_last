@@ -58,10 +58,14 @@ public class RoomReservationServiceImpl implements RoomReservationService {
                 .orElseThrow(() -> new RecordNotFoundException(String.format("Reservation with id: %s, not found", id)));
     }
 
+
     @Override
     public List<Room> findRoomByPeriodAndPeople(Instant startDate, Instant endDate, int adults, int kids) {
         return roomReservationRepository.findRoomByPeriodAndPeople(startDate, endDate, (adults + kids));
     }
+
+
+
 
     @Override
     public void deleteByRoomIdAndReservationId(Long id, Long rid) {

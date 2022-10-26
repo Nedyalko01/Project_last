@@ -43,7 +43,7 @@ public class CarTransferConverter {
 
         CarResponse carResponse = CarConverter.convertToCarResponse(carTransfer.getCar());
 
-        UserResponse userResponse = UserConverter.convertToUserDto(carTransfer.getUser());
+        UserResponse userResponse = UserConverter.convertToUserResponse(carTransfer.getUser());
 
         CarTransferResponse carTransferResponse = new CarTransferResponse();
         carTransferResponse.setId(carTransfer.getId());

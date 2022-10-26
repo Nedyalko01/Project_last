@@ -87,7 +87,7 @@ public class RoomReservationConverter {
     public static UserReservationResponse convertToUserReservationResponse(RoomReservation roomReservation) {
 
         User user = roomReservation.getUser();
-        UserResponse userResponse = UserConverter.convertToUserDto(user);
+        UserResponse userResponse = UserConverter.convertToUserResponse(user);
 
         Room room = roomReservation.getRoom();
         RoomResponse roomResponse = RoomConverter.convertToRoomResponse(room);

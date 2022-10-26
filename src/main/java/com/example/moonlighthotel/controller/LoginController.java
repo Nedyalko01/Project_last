@@ -34,7 +34,7 @@ public class LoginController {
 
     String token = loginService.login(authenticationRequest);
 
-    UserResponse user = UserConverter.convertToUserDto(userService.loadUserByUsername(authenticationRequest.getUsername()));
+    UserResponse user = UserConverter.convertToUserResponse(userService.loadUserByUsername(authenticationRequest.getUsername()));
 
     return new ResponseEntity<>(new AuthenticationResponse(token, user), HttpStatus.OK);
 

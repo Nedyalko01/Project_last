@@ -16,8 +16,10 @@ import com.example.moonlighthotel.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,7 +67,7 @@ public class RoomController {
 
     }
 
-    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<RoomResponse> findById(@PathVariable Long id) {
 
@@ -74,7 +76,8 @@ public class RoomController {
         return new ResponseEntity<>(room, HttpStatus.OK);
     }
 
-    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long id, @RequestBody RoomRequest request) {
 
@@ -86,7 +89,7 @@ public class RoomController {
 
     }
 
-    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id) {
 
@@ -99,8 +102,8 @@ public class RoomController {
     }
 
 
-    //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
-    @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_CLIENT')")
+    @GetMapping("/v1")
     public ResponseEntity<List<RoomResponse>> getAvailableRoomsByPeriodAndGuests(@RequestBody AvailableRoomRequest request) {
 
         List<Room> room = roomReservationService.findRoomByPeriodAndPeople(
@@ -130,7 +133,20 @@ public class RoomController {
 
     }
 
+    @GetMapping
+    public ResponseEntity<List<RoomResponse>> getAvailableRoomsByPeriodAndGuests(@RequestParam Instant startDate,
+                                                                                 @RequestParam Instant endDate,
+                                                                                 @RequestParam int adults,
+                                                                                 @RequestParam int kids) {
 
+        List<Room> room = roomReservationService.findRoomByPeriodAndPeople(startDate, endDate, adults, kids);
+
+        List<RoomResponse> rooms = room.stream().map(RoomConverter::convertToRoomResponse).collect(Collectors.toList());
+
+        return new ResponseEntity<>(rooms, HttpStatus.OK);
     }
+
+}
+
 
 

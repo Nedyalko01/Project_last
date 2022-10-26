@@ -1,7 +1,5 @@
-package com.example.moonlighthotel.controller;
+package com.example.moonlighthotel.converter;
 
-import com.example.moonlighthotel.converter.TableConverter;
-import com.example.moonlighthotel.converter.UserConverter;
 import com.example.moonlighthotel.dto.restaurant.TableReservationRequest;
 import com.example.moonlighthotel.dto.restaurant.TableReservationResponse;
 import com.example.moonlighthotel.dto.restaurant.TableReservationUpdateRequest;
@@ -52,7 +50,7 @@ public class TableReservationConverter {
 
             TableResponse tableResponse = TableConverter.convertToTableResponse(tableReservation.getTable());
 
-            UserResponse userResponse = UserConverter.convertToUserDto(tableReservation.getUser());
+            UserResponse userResponse = UserConverter.convertToUserResponse(tableReservation.getUser());
 
             return new TableReservationResponse.Builder()
                     .addId(tableReservation.getId())
